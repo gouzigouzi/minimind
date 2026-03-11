@@ -11,11 +11,11 @@ class MiniMindConfig(PretrainedConfig):
     def __init__(
             self,
             dropout: float = 0.0,
-            bos_token_id: int = 1,
+            bos_token_id: int = 1,  # 通常是文本生成任务中表示序列开始的特殊token的ID，模型在生成文本时会以这个token作为起始输入。设置为1可能是因为在这个模型的词表中，ID为1的token被指定为序列开始标记（BOS）。如果使用了预训练权重，确保这个ID与预训练时使用的BOS token ID一致，否则可能会导致生成结果不正确。
             eos_token_id: int = 2,
             hidden_act: str = 'silu',
             hidden_size: int = 512,
-            intermediate_size: int = None,
+            intermediate_size: int = None,  # 如果未指定intermediate_size，则在FeedForward中自动设置为hidden_size的8/3倍，并向上调整为64的倍数，以优化计算效率
             max_position_embeddings: int = 32768,
             num_attention_heads: int = 8,
             num_hidden_layers: int = 8,
@@ -24,7 +24,7 @@ class MiniMindConfig(PretrainedConfig):
             rms_norm_eps: float = 1e-05,
             rope_theta: int = 1000000.0,
             inference_rope_scaling: bool = False,
-            flash_attn: bool = True,
+            flash_attn: bool = True,  # 是否使用Flash Attention，Flash Attention是一种高效的注意力机制实现，可以显著减少内存使用和加速训练，特别是在处理长序列时。启用flash_attn可以提升模型的训练效率，但需要确保PyTorch版本支持该功能（通常是PyTorch 2.0及以上）。如果遇到兼容性问题或不需要处理长序列，可以将flash_attn设置为False。
             ####################################################
             # Here are the specific configurations of MOE
             # When use_moe is false, the following is invalid

@@ -97,7 +97,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # ========== 1. 初始化环境和随机种子 ==========
-    local_rank = init_distributed_mode()
+    local_rank = init_distributed_mode()  # 该函数会自动设置local_rank、world_size、rank等分布式相关环境变量
     if dist.is_initialized(): args.device = f"cuda:{local_rank}"
     setup_seed(42 + (dist.get_rank() if dist.is_initialized() else 0))
     
@@ -123,7 +123,7 @@ if __name__ == "__main__":
     # ========== 5. 定义模型、数据、优化器 ==========
     model, tokenizer = init_model(lm_config, args.from_weight, device=args.device)
     if args.use_compile == 1:
-        model = torch.compile(model)
+        model = torch.compile(model)  # torch.compile在第一次前向传播时会有较大开销，但后续迭代会显著加速，适合长时间训练的场景
         Logger('torch.compile enabled')
     train_ds = PretrainDataset(args.data_path, tokenizer, max_length=args.max_seq_len)
     train_sampler = DistributedSampler(train_ds) if dist.is_initialized() else None
