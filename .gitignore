@@ -5,3 +5,5 @@ docs-minimind/
 dataset/dpo.jsonl
 dataset/pretrain_hq.jsonl
 dataset/sft_mini_512.jsonl
+dataset/sft_512.jsonl
+dataset/sft_2048.jsonl
