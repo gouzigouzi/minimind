@@ -48,7 +48,7 @@ def train_epoch(epoch, loader, iters, tokenizer, lm_config, start_step=0, wandb=
                                              ).to(args.device))
             loss_mask_flat = loss_mask.view(-1)
             loss_mask_sum = loss_mask_flat.sum()
-            loss_mask_flat[sp_ids] = 10
+            loss_mask_flat[sp_ids] = 10  # 将特殊token位置的loss放大10倍，迫使模型更快地学会区分和生成这些token，从而提升模型的理解和生成能力
             loss_mask = loss_mask_flat.view(shift_labels.size())
             logits_loss = (loss * loss_mask).sum() / loss_mask_sum
             loss = logits_loss + res.aux_loss
